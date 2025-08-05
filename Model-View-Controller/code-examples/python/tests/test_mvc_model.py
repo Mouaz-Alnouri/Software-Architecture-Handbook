@@ -1,4 +1,4 @@
-# tests/test_model.py
+# tests/test_contact_service.py
 """Unit tests for the Model component."""
 
 import pytest
