@@ -1,5 +1,8 @@
 # 🏛️ Architectural Pattern: Model-View-Controller (MVC)
 
+
+[![Python CI and Test](https://github.com/Mouaz-Alnouri/Software-Architecture-Handbook/actions/workflows/python-ci.yml/badge.svg)](https://github.com/Mouaz-Alnouri/Software-Architecture-Handbook/actions/workflows/python-ci.yml)
+
 ## 🎯 1. Overview
 
 The Model-View-Controller (MVC) pattern is a foundational architectural design for building user interfaces. Its primary goal is to separate an application's concerns into three interconnected components, delegating responsibilities for business logic, presentation, and user input.
