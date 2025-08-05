@@ -2,7 +2,7 @@
 """Unit tests for the Model component."""
 
 import pytest
-from ..model import Model
+from model import Model
 
 @pytest.fixture
 def model() -> Model:
