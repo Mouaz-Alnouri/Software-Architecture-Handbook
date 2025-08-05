@@ -1,7 +1,7 @@
 # 🏛️ Architectural Pattern: Model-View-Controller (MVC)
 
 
-[![Python CI and Test](https://github.com/Mouaz-Alnouri/Software-Architecture-Handbook/actions/workflows/python-ci.yml/badge.svg)](https://github.com/Mouaz-Alnouri/Software-Architecture-Handbook/actions/workflows/python-ci.yml)
+
 
 ## 🎯 1. Overview
 
