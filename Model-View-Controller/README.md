@@ -33,3 +33,13 @@ MVC is a strong choice for:
 ## 💻 5. Code Example
 
 For a practical implementation, see the [**Python code example**](./code-examples/python/) in the `code-examples` directory.
+
+## 🧠 6. Design Rationale & Deeper Dive
+
+The code example in this repository was written to demonstrate more than just the basic MVC structure. It intentionally includes several professional best practices:
+
+* **Why use Dependency Injection?** In `main.py`, we create the `Model` and `View` first, then "inject" them into the `Controller`. A more junior implementation might have the `Controller` create its own `Model` and `View`. We avoid that because DI **decouples** our components. This makes our application flexible and, most importantly, **testable**. We can easily test the `Controller` in isolation by providing it with a "mock" or "fake" `Model` object.
+
+* **The Role of `main.py`:** This file acts as the **Composition Root**. Its only job is to build and wire together the components. This is a critical clean code principle. It separates the *construction* of the application from its *runtime logic*.
+
+* **Type Hinting and Docstrings:** Senior-level code is written for others (and your future self) to understand. Type hints and clear docstrings are not optional; they are a fundamental part of creating robust, maintainable software. They act as a contract, clearly defining what each component expects and what it provides.
