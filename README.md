@@ -1,7 +1,5 @@
 # Software Architecture: A Pragmatic Guide
 
-[![Python CI and Test](https://github.com/Mouaz-Alnouri/Software-Architecture-Handbook/actions/workflows/python-ci.yml/badge.svg)](https://github.com/Mouaz-Alnouri/Software-Architecture-Handbook/actions/workflows/python-ci.yml)
-
 This repository is a curated collection of software architecture and design patterns. It's built as a practical handbook for engineers who design, build, and maintain robust, scalable, and resilient systems.
 
 The focus here is not on abstract theory, but on understanding the core principles, trade-offs, and ideal use cases for each pattern.
