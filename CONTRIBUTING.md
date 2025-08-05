@@ -7,7 +7,7 @@ To ensure quality and consistency, please follow these guidelines.
 ## How to Contribute
 
 ### Suggesting a New Pattern or Improvement
-1.  **Open an Issue:** Before starting any work, please [open an issue](https://github.com/[Your-Username]/[Your-Repo-Name]/issues) to discuss your idea. This allows us to coordinate efforts and ensure the suggestion aligns with the project's goals.
+1.  **Open an Issue:** Before starting any work, please [open an issue](https://github.com/Mouaz-Alnouri/Software-Architecture-Handbook/issues) to discuss your idea. This allows us to coordinate efforts and ensure the suggestion aligns with the project's goals.
 2.  **Label the Issue:** Use labels like `new-pattern`, `enhancement`, or `bug` to categorize your suggestion.
 
 ### Submitting a Pull Request
