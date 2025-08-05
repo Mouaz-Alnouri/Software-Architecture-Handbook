@@ -1,5 +1,11 @@
 # Software Architecture: A Pragmatic Guide
 
+[![Python CI and Test](https://github.com/Mouaz-Alnouri/Software-Architecture-Handbook/actions/workflows/python-ci.yml/badge.svg)](https://github.com/Mouaz-Alnouri/Software-Architecture-Handbook/actions/workflows/python-ci.yml)
+[![codecov](https://codecov.io/gh/Mouaz-Alnouri/Software-Architecture-Handbook/branch/main/graph/badge.svg)](https://codecov.io/gh/Mouaz-Alnouri/Software-Architecture-Handbook)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
+
 This repository is a curated collection of software architecture and design patterns. It's built as a practical handbook for engineers who design, build, and maintain robust, scalable, and resilient systems.
 
 The focus here is not on abstract theory, but on understanding the core principles, trade-offs, and ideal use cases for each pattern.
