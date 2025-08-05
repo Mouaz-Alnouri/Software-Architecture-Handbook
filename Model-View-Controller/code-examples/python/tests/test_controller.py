@@ -3,9 +3,9 @@
 
 import pytest
 from unittest.mock import MagicMock
-from ..model import Model
-from ..view import View
-from ..controller import Controller
+from model import Model        
+from view import View           
+from controller import Controller 
 
 @pytest.fixture
 def mock_model() -> MagicMock:
