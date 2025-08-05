@@ -1,6 +1,6 @@
 # Software Architecture: A Pragmatic Guide
 
-[![Python CI and Test](https://github.com/Mouaz-Alnouri/Software-Architecture-Handbook/actions/workflows/python-ci.yml/badge.svg)](https://github.com/Mouaz-Alnouri/Software-Architecture-Handbook/actions/workflows/python-ci.yml)
+[![Python CI and Test](https://github.com/Mouaz-Alnouri/Software-Architecture-Handbook/actions/workflows/main.yml/badge.svg)](https://github.com/Mouaz-Alnouri/Software-Architecture-Handbook/actions/workflows/main.yml)
 [![codecov](https://codecov.io/gh/Mouaz-Alnouri/Software-Architecture-Handbook/branch/main/graph/badge.svg)](https://codecov.io/gh/Mouaz-Alnouri/Software-Architecture-Handbook)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
