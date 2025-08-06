@@ -16,7 +16,8 @@ def main():
     repo = InMemoryContactRepository()
     service = ContactService(repo)
     view = CLIView(service)
-    controller = CLIController(service)
+    # Pass both the service and the view to the controller
+    controller = CLIController(service=service, view=view)
 
     # 2. Wire them together: The View observes the Service
     service.attach(view)

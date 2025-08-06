@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..domain.model import ContactService
+    from .cli_view import CLIView
 
 
 class CLIController:
@@ -14,14 +15,15 @@ class CLIController:
     and orchestrating the application flow.
     """
 
-    def __init__(self, service: 'ContactService'):
+    def __init__(self, service: 'ContactService', view: 'CLIView'):
         self.service = service
+        self.view = view
 
     def _display_menu(self):
         """Prints the command menu."""
         print("\n--- Commands ---")
         print("add    - Add a new contact")
-        print("list   - (View is always up to date)")
+        print("list   - Refresh the contact list view")
         print("update - Update a contact (by ID)")
         print("delete - Delete a contact (by ID)")
         print("exit   - Exit the application")
@@ -82,10 +84,8 @@ class CLIController:
                     print("Error: Invalid input. Please enter a number.")
 
             elif command == "list":
-                # The view is always up-to-date due to the Observer pattern,
-                # so we just need to let the loop continue.
-                # A small message can provide good user feedback.
-                print("The contact list is displayed above.")
+                # Explicitly tell the view to redraw itself.
+                self.view.display_contacts()
 
             else:
                 print("Unknown command.")

@@ -1,11 +1,13 @@
-# contact_book_app/src/presentation/cli_view.py
+# src/contact_book_app/src/contact_book_app/presentation/cli_view.py
 """
 This module contains the View component for the CLI application.
 """
 import os
+import time  # Import the time module
 from typing import TYPE_CHECKING
 from ..domain.observer import Observer
 
+# Use a forward reference for the ContactService type hint
 if TYPE_CHECKING:
     from ..domain.model import ContactService
 
@@ -48,4 +50,5 @@ class CLIView(Observer):
         Receives notification from the service and redraws the contact list.
         """
         print("\nChange detected, refreshing view...")
+        time.sleep(0.75)  # Add a small pause to make the refresh noticeable
         self.display_contacts()

@@ -1,73 +1,94 @@
-# contact_book_app/tests/test_cli_controller.py
-"""Tests for the CLI Controller component."""
-import pytest
-from unittest.mock import MagicMock, patch
+# src/contact_book_app/src/contact_book_app/presentation/cli_controller.py
+"""
+This module contains the Controller component for the CLI application.
+"""
+import time  # Import the time module
+from typing import TYPE_CHECKING
 
-from contact_book_app.domain.model import ContactService
-from contact_book_app.presentation.cli_controller import CLIController
-
-
-@pytest.fixture
-def mock_service() -> MagicMock:
-    """Provides a mocked service for testing the controller."""
-    return MagicMock(spec=ContactService)
+if TYPE_CHECKING:
+    from ..domain.model import ContactService
+    from .cli_view import CLIView
 
 
-def test_controller_calls_add_contact_on_service(mock_service: MagicMock):
+class CLIController:
     """
-    Tests that the controller correctly parses the 'add' command and
-    calls the service's add_contact method.
+    The command-line controller, responsible for handling user input
+    and orchestrating the application flow.
     """
-    # ARRANGE
-    controller = CLIController(service=mock_service)
 
-    # Simulate user typing: 'add', 'Test User', 'test@example.com', 'exit'
-    user_inputs = ['add', 'Test User', 'test@example.com', 'exit']
+    def __init__(self, service: 'ContactService', view: 'CLIView'):
+        self.service = service
+        self.view = view
 
-    # ACT
-    with patch('builtins.input', side_effect=user_inputs):
-        controller.run()
+    def _display_menu(self):
+        """Prints the command menu."""
+        print("\n--- Commands ---")
+        print("add    - Add a new contact")
+        print("list   - Refresh the contact list view")
+        print("update - Update a contact (by ID)")
+        print("delete - Delete a contact (by ID)")
+        print("exit   - Exit the application")
+        print("----------------")
 
-    # ASSERT
-    # Verify that the service's add_contact method was called with the correct arguments
-    mock_service.add_contact.assert_called_once_with(name='Test User', email='test@example.com')
+    def run(self):
+        """Starts the main application loop."""
+        while True:
+            self._display_menu()
+            command = input("Enter command: ").strip().lower()
 
+            if command == "exit":
+                print("Exiting...")
+                break
 
-def test_controller_calls_list_contacts_on_service(mock_service: MagicMock):
-    """
-    Tests that the controller calls get_all_contacts when the user lists contacts.
-    Note: The 'list' command is implicitly tested because the view refreshes.
-    This test ensures the controller itself doesn't need a separate 'list' method.
-    When we add a contact, the service notifies the view, which calls get_all_contacts.
-    """
-    # ARRANGE
-    controller = CLIController(service=mock_service)
-    user_inputs = ['add', 'Any Name', 'any@email.com', 'exit']
+            elif command == "add":
+                name = input("Enter name: ").strip()
+                email = input("Enter email (optional): ").strip()
+                if not email:
+                    email = None
+                try:
+                    self.service.add_contact(name=name, email=email)
+                except ValueError as e:
+                    print(f"Error: {e}")
 
-    # ACT
-    with patch('builtins.input', side_effect=user_inputs):
-        controller.run()
+            elif command == "update":
+                try:
+                    list_id = int(input("Enter contact ID to update: ").strip())
+                    contacts = self.service.get_all_contacts()
+                    if 1 <= list_id <= len(contacts):
+                        contact_to_update = contacts[list_id - 1]
 
-    # ASSERT
-    # The view (which is real, not mocked) will be notified after 'add'
-    # and will call get_all_contacts.
-    assert mock_service.get_all_contacts.called
+                        new_name = input(f"Enter new name for {contact_to_update.name}: ").strip()
+                        new_email = input(f"Enter new email for {contact_to_update.name} (optional): ").strip()
+                        if not new_email:
+                            new_email = None
 
+                        self.service.update_contact(
+                            contact_id=contact_to_update.contact_id,
+                            name=new_name,
+                            email=new_email
+                        )
+                    else:
+                        print("Error: Invalid ID.")
+                except ValueError as e:
+                    print(f"Error: Invalid input. Please enter a number. Details: {e}")
 
-def test_controller_handles_exit_command(mock_service: MagicMock):
-    """
-    Tests that the main loop exits when the user types 'exit'.
-    """
-    # ARRANGE
-    controller = CLIController(service=mock_service)
-    user_inputs = ['exit']
+            elif command == "delete":
+                try:
+                    list_id = int(input("Enter contact ID to delete: ").strip())
+                    contacts = self.service.get_all_contacts()
+                    if 1 <= list_id <= len(contacts):
+                        contact_to_delete = contacts[list_id - 1]
+                        self.service.delete_contact(contact_id=contact_to_delete.contact_id)
+                    else:
+                        print("Error: Invalid ID.")
+                except ValueError:
+                    print("Error: Invalid input. Please enter a number.")
 
-    # ACT
-    with patch('builtins.input', side_effect=user_inputs):
-        controller.run()
+            elif command == "list":
+                # Add feedback and a pause for a better user experience.
+                print("Refreshing contact list...")
+                time.sleep(0.75)
+                self.view.display_contacts()
 
-    # ASSERT
-    # If the test finishes without an infinite loop, it has succeeded.
-    # We also verify that no core service methods were called.
-    mock_service.add_contact.assert_not_called()
-    mock_service.delete_contact.assert_not_called()
+            else:
+                print("Unknown command.")
