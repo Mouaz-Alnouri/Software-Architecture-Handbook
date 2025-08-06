@@ -4,6 +4,9 @@
 ![Python Version](https://img.shields.io/badge/python-3.7%2B-blue.svg)
 ![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
+ository` interface to request data operations and the `Observable` to announce changes.
+
+* **View (Presentation Layer):** The `CLIView` is responsible only for displaying data. It implements the `Observer` interface and listens for notifications from the `ContactService`. When notified, it redraws the screen with the latest data.
 
 This isn't just another contact book application. It's a portfolio project designed from the ground up to demonstrate a professional, modern approach to software development. It serves as a practical example of building a robust, maintainable, and testable application using clean architecture principles in Python.
 
@@ -39,3 +42,94 @@ This isn't just another contact book application. It's a portfolio project desig
 ## 📂 Project Structure
 
 The project uses a modern `src-layout` to clearly separate the application package from other project files like tests and configuration.
+```contact-book-app/
+├── src/
+│   └── contact_book_app/   # Main application package
+│       ├── init.py
+│       ├── domain/         # Core business logic and entities
+│       ├── infrastructure/ # Concrete data layer implementations
+│       ├── presentation/   # UI components (View, Controller)
+│       └── main.py         # Application entry point callable
+├── tests/                  # Unit and integration tests
+└── pyproject.toml          # Project configuration and dependencies
+```
+## 🚀 Getting Started
+
+Follow these steps to get the application running on your local machine.
+
+### Prerequisites
+* Python 3.7+
+* `pip` and `venv`
+
+### Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/YOUR_USERNAME/YOUR_REPO.git](https://github.com/YOUR_USERNAME/YOUR_REPO.git)
+    cd YOUR_REPO
+    ```
+
+2.  **Create and activate a virtual environment:**
+    ```bash
+    # For Windows
+    python -m venv venv
+    venv\Scripts\activate
+
+    # For macOS/Linux
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
+
+3.  **Install the package in editable mode:**
+    This command uses `pyproject.toml` to install the application and create the `contact-book` command-line script.
+    ```bash
+    pip install -e .
+    ```
+
+## 💻 Usage
+
+After installation, you can run the application from anywhere in your activated virtual environment.
+
+1.  **Run the application:**
+    ```bash
+    contact-book
+    ```
+
+2.  **Interact with the menu:**
+    The application will launch and display the contact list and a menu of commands.
+
+    ```
+    ===== Contact Book =====
+    No contacts found.
+    ========================
+
+    --- Commands ---
+    add    - Add a new contact
+    list   - Refresh the contact list view
+    update - Update a contact (by ID)
+    delete - Delete a contact (by ID)
+    exit   - Exit the application
+    ----------------
+    Enter command:
+    ```
+
+## ✅ Running the Tests
+
+To run the full suite of unit tests, use `pytest`.
+
+```bash
+pytest
+You should see all tests pass, confirming the application's integrity.
+
+========================= test session starts =========================
+...
+collected 17 items
+
+tests/test_cli_controller.py ...                                 [ 17%]
+tests/test_cli_view.py ..                                        [ 29%]
+tests/test_contact_service.py ...........                        [ 94%]
+tests/test_repository.py ...                                     [100%]
+
+========================= 17 passed in 0.10s ==========================
+📜 License
+This project is licensed under the MIT License.
