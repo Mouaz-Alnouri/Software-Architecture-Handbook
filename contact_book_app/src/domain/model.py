@@ -45,3 +45,31 @@ class ContactService:
     def delete_contact(self, contact_id: uuid.UUID) -> None:
         """Deletes a contact by their ID."""
         self.repo.delete(contact_id)
+
+    def update_contact(self, contact_id: uuid.UUID, name: str, email: Optional[str]) -> Contact:
+        """
+        Updates an existing contact's details.
+
+        This method retrieves a contact, applies the new data, checks for
+        business rule violations, and then persists the changes.
+        """
+        contact_to_update = self.repo.get(contact_id)
+        if not contact_to_update:
+            raise ValueError("Contact not found.")
+
+        if not name:
+            raise ValueError("Name cannot be empty.")
+
+        # Check for duplicate emails, but only if the email is being changed.
+        if email and email != contact_to_update.email:
+            for contact in self.repo.list():
+                # We must not compare the contact with itself
+                if contact.contact_id != contact_id and contact.email == email:
+                    raise ValueError("Email already exists.")
+
+        # Update the fields of the retrieved contact object
+        contact_to_update.name = name
+        contact_to_update.email = email
+
+        self.repo.update(contact_to_update)
+        return contact_to_update

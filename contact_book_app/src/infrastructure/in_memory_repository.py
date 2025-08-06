@@ -36,3 +36,11 @@ class InMemoryContactRepository(AbstractContactRepository):
         Fails silently if the ID does not exist.
         """
         self._contacts.pop(contact_id, None)
+
+    def update(self, contact: Contact) -> None:
+        """
+        Updates a contact in the dictionary by replacing the existing one.
+        Assumes the contact ID already exists.
+        """
+        if contact.contact_id in self._contacts:
+            self._contacts[contact.contact_id] = contact
