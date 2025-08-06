@@ -4,9 +4,6 @@
 ![Python Version](https://img.shields.io/badge/python-3.7%2B-blue.svg)
 ![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
-ository` interface to request data operations and the `Observable` to announce changes.
-
-* **View (Presentation Layer):** The `CLIView` is responsible only for displaying data. It implements the `Observer` interface and listens for notifications from the `ContactService`. When notified, it redraws the screen with the latest data.
 
 This isn't just another contact book application. It's a portfolio project designed from the ground up to demonstrate a professional, modern approach to software development. It serves as a practical example of building a robust, maintainable, and testable application using clean architecture principles in Python.
 
