@@ -1,4 +1,5 @@
-name: Python Application CI
+# .github/workflows/main-ci.yml
+name: Python CI and Test
 
 on:
   push:
@@ -7,30 +8,35 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.11"] # Test against multiple Python versions
+
+    # Set the default working directory for all subsequent `run` steps
+    defaults:
+      run:
+        working-directory: ./contact_book_app
 
     steps:
-    - name: Check out repository code
-      uses: actions/checkout@v4
+      - name: Check out repository code
+        uses: actions/checkout@v4
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pytest pytest-cov
-        # This is the most important step:
-        # It installs your project in "editable" mode so pytest can find it.
-        pip install -e .
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov codecov
+          # This command now correctly runs inside the 'contact_book_app' directory
+          pip install -e .
 
-    - name: Run tests with pytest
-      run: |
-        # Specify the package to cover for more accurate reporting
-        pytest --cov=contact_book_app --cov-report=xml
+      - name: Run tests and generate coverage report
+        run: pytest --cov=contact_book_app --cov-report=xml
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          working-directory: ./contact_book_app
