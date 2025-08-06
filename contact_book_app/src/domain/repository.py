@@ -36,3 +36,8 @@ class AbstractContactRepository(ABC):
     def list(self) -> List[Contact]:
         """Lists all contacts in the repository."""
         raise NotImplementedError
+
+    @abstractmethod
+    def delete(self, contact_id: uuid.UUID) -> None:
+        """Deletes a contact by its unique ID."""
+        raise NotImplementedError

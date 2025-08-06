@@ -41,3 +41,7 @@ class ContactService:
     def get_all_contacts(self) -> List[Contact]:
         """Returns all contacts."""
         return self.repo.list()
+
+    def delete_contact(self, contact_id: uuid.UUID) -> None:
+        """Deletes a contact by their ID."""
+        self.repo.delete(contact_id)

@@ -22,3 +22,24 @@ def test_repository_can_add_a_contact():
     # ASSERT
     assert retrieved_contact == contact
     assert len(repo.list()) == 1
+
+
+def test_repository_can_delete_a_contact():
+    """
+    Tests that a contact can be deleted from the repository.
+    """
+    # ARRANGE
+    repo = InMemoryContactRepository()
+    contact_id = uuid.uuid4()
+    contact = Contact(contact_id=contact_id, name="John Doe")
+    repo.add(contact)
+
+    # Check that it was added correctly
+    assert len(repo.list()) == 1
+
+    # ACT
+    repo.delete(contact_id)
+
+    # ASSERT
+    assert repo.get(contact_id) is None
+    assert len(repo.list()) == 0

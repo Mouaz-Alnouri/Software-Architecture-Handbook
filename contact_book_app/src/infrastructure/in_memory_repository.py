@@ -29,3 +29,10 @@ class InMemoryContactRepository(AbstractContactRepository):
     def list(self) -> List[Contact]:
         """Returns a list of all contacts."""
         return list(self._contacts.values())
+
+    def delete(self, contact_id: uuid.UUID) -> None:
+        """
+        Deletes a contact from the in-memory dictionary.
+        Fails silently if the ID does not exist.
+        """
+        self._contacts.pop(contact_id, None)
