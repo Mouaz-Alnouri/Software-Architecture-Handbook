@@ -3,9 +3,9 @@
 import uuid
 import pytest
 from unittest.mock import MagicMock
-from domain.model import ContactService
-from domain.repository import Contact
-from presentation.cli_view import CLIView
+from contact_book_app.domain.model import ContactService
+from contact_book_app.domain.repository import Contact
+from contact_book_app.presentation.cli_view import CLIView
 
 
 @pytest.fixture

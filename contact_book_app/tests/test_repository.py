@@ -2,8 +2,8 @@
 """Tests for the repository implementations."""
 import uuid
 import pytest
-from domain.repository import Contact
-from infrastructure.in_memory_repository import InMemoryContactRepository
+from contact_book_app.domain.repository import Contact
+from contact_book_app.infrastructure.in_memory_repository import InMemoryContactRepository
 
 
 def test_repository_can_add_a_contact():

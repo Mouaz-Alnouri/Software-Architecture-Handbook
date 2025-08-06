@@ -1,0 +1,15 @@
+[project]
+name = "contact-book-app"
+version = "0.1.0"
+description = "A CLI contact book application demonstrating clean architecture."
+requires-python = ">=3.7"
+dependencies = []
+
+[project.scripts]
+contact-book = "contact_book_app.main:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]

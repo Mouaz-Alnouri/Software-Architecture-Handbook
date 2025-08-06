@@ -4,11 +4,10 @@ This module contains the View component for the CLI application.
 """
 import os
 from typing import TYPE_CHECKING
-from domain.observer import Observer
+from ..domain.observer import Observer
 
-# Use a forward reference for the ContactService type hint
 if TYPE_CHECKING:
-    from domain.model import ContactService
+    from ..domain.model import ContactService
 
 
 class CLIView(Observer):

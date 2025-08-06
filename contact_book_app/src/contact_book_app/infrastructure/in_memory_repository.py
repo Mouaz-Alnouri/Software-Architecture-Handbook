@@ -6,8 +6,7 @@ using a simple in-memory dictionary as the data store.
 import uuid
 from typing import Dict, List, Optional
 
-from domain.repository import AbstractContactRepository, Contact
-
+from ..domain.repository import AbstractContactRepository, Contact
 
 class InMemoryContactRepository(AbstractContactRepository):
     """

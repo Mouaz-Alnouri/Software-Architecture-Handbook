@@ -4,9 +4,9 @@
 import uuid
 import pytest
 from unittest.mock import MagicMock, ANY
-from domain.repository import AbstractContactRepository, Contact
-from domain.model import ContactService
-from domain.observer import Observer
+from contact_book_app.domain.repository import AbstractContactRepository, Contact
+from contact_book_app.domain.model import ContactService
+from contact_book_app.domain.observer import Observer
 
 
 @pytest.fixture
