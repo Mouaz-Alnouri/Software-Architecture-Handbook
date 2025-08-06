@@ -6,6 +6,7 @@ import pytest
 from unittest.mock import MagicMock, ANY
 from domain.repository import AbstractContactRepository, Contact
 from domain.model import ContactService
+from domain.observer import Observer
 
 
 @pytest.fixture
@@ -18,7 +19,72 @@ def mock_repo() -> MagicMock:
     return MagicMock(spec=AbstractContactRepository, **{method: MagicMock() for method in methods})
 
 
-# ... (keep all existing test functions: test_add_contact_successfully, test_add_contact_with_empty_name_raises_error, test_add_contact_with_duplicate_email_raises_error, test_delete_contact_successfully) ...
+@pytest.fixture
+def mock_observer() -> MagicMock:
+    """Provides a mocked observer for testing notifications."""
+    return MagicMock(spec=Observer)
+
+
+def test_add_contact_successfully(mock_repo: MagicMock):
+    """
+    Tests that a contact with a valid name is created and added via the repo.
+    """
+    # ARRANGE
+    mock_repo.list.return_value = []
+    service = ContactService(repo=mock_repo)
+
+    # ACT
+    contact = service.add_contact(name="Jane Doe", email="jane.doe@example.com")
+
+    # ASSERT
+    assert contact.name == "Jane Doe"
+    mock_repo.add.assert_called_once_with(contact)
+
+
+def test_add_contact_with_empty_name_raises_error(mock_repo: MagicMock):
+    """
+    Tests that the service raises a ValueError if the name is empty.
+    """
+    # ARRANGE
+    service = ContactService(repo=mock_repo)
+
+    # ACT & ASSERT
+    with pytest.raises(ValueError, match="Name cannot be empty."):
+        service.add_contact(name="")
+
+    mock_repo.add.assert_not_called()
+
+
+def test_add_contact_with_duplicate_email_raises_error(mock_repo: MagicMock):
+    """
+    Tests that adding a contact with a pre-existing email raises a ValueError.
+    """
+    # ARRANGE
+    existing_contact = Contact(contact_id=ANY, name="John Doe", email="john.doe@example.com")
+    mock_repo.list.return_value = [existing_contact]
+    service = ContactService(repo=mock_repo)
+
+    # ACT & ASSERT
+    with pytest.raises(ValueError, match="Email already exists."):
+        service.add_contact(name="Jane Doe", email="john.doe@example.com")
+
+    mock_repo.add.assert_not_called()
+
+
+def test_delete_contact_successfully(mock_repo: MagicMock):
+    """
+    Tests that the service calls the repo's delete method with the correct ID.
+    """
+    # ARRANGE
+    service = ContactService(repo=mock_repo)
+    contact_id_to_delete = uuid.uuid4()
+
+    # ACT
+    service.delete_contact(contact_id=contact_id_to_delete)
+
+    # ASSERT
+    mock_repo.delete.assert_called_once_with(contact_id_to_delete)
+
 
 def test_update_contact_successfully(mock_repo: MagicMock):
     """
@@ -77,7 +143,7 @@ def test_update_contact_to_duplicate_email_raises_error(mock_repo: MagicMock):
     contact_to_update_id = uuid.uuid4()
 
     contact_to_update = Contact(contact_id=contact_to_update_id, name="Jane Doe", email="jane@example.com")
-    existing_contact = Contact(contact_id=uuid.uuid4(), name="John Doe", email="john@example.com")
+    existing__contact = Contact(contact_id=uuid.uuid4(), name="John Doe", email="john@example.com")
 
     # Configure mock repo
     mock_repo.get.return_value = contact_to_update
@@ -88,3 +154,59 @@ def test_update_contact_to_duplicate_email_raises_error(mock_repo: MagicMock):
         service.update_contact(contact_id=contact_to_update_id, name="Jane Doe", email="john@example.com")
 
     mock_repo.update.assert_not_called()
+
+
+def test_service_notifies_observers_on_add(mock_repo: MagicMock, mock_observer: MagicMock):
+    """Tests that observers are notified when a contact is added."""
+    # ARRANGE
+    service = ContactService(repo=mock_repo)
+    service.attach(mock_observer)
+    mock_repo.list.return_value = []  # For duplicate email check
+
+    # ACT
+    service.add_contact(name="Test", email="test@example.com")
+
+    # ASSERT
+    mock_observer.update.assert_called_once_with(service)
+
+
+def test_service_notifies_observers_on_update(mock_repo: MagicMock, mock_observer: MagicMock):
+    """Tests that observers are notified when a contact is updated."""
+    # ARRANGE
+    service = ContactService(repo=mock_repo)
+    service.attach(mock_observer)
+    contact_id = uuid.uuid4()
+    original_contact = Contact(contact_id=contact_id, name="Old", email="old@example.com")
+    mock_repo.get.return_value = original_contact
+
+    # ACT
+    service.update_contact(contact_id=contact_id, name="New", email="new@example.com")
+
+    # ASSERT
+    mock_observer.update.assert_called_once_with(service)
+
+
+def test_service_notifies_observers_on_delete(mock_repo: MagicMock, mock_observer: MagicMock):
+    """Tests that observers are notified when a contact is deleted."""
+    # ARRANGE
+    service = ContactService(repo=mock_repo)
+    service.attach(mock_observer)
+
+    # ACT
+    service.delete_contact(contact_id=uuid.uuid4())
+
+    # ASSERT
+    mock_observer.update.assert_called_once_with(service)
+
+
+def test_service_does_not_notify_on_error(mock_repo: MagicMock, mock_observer: MagicMock):
+    """Tests that observers are NOT notified if an operation fails."""
+    # ARRANGE
+    service = ContactService(repo=mock_repo)
+    service.attach(mock_observer)
+
+    # ACT & ASSERT
+    with pytest.raises(ValueError):
+        service.add_contact(name="")  # This will raise an error
+
+    mock_observer.update.assert_not_called()

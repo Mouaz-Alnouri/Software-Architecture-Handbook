@@ -5,13 +5,27 @@ import uuid
 from typing import List, Optional
 
 from .repository import AbstractContactRepository, Contact
+from .observer import Observable, Observer
 
 
 class ContactService:
-    """The service layer containing the core application logic."""
+    """
+    The service layer containing the core application logic.
+    This class uses the Observable pattern to notify interested parties
+    (like the UI) of changes.
+    """
 
     def __init__(self, repo: AbstractContactRepository):
         self.repo = repo
+        self._observable = Observable()
+
+    def attach(self, observer: Observer) -> None:
+        """Attach an observer to the service."""
+        self._observable.attach(observer)
+
+    def detach(self, observer: Observer) -> None:
+        """Detach an observer from the service."""
+        self._observable.detach(observer)
 
     def add_contact(self, name: str, email: Optional[str] = None) -> Contact:
         """
@@ -36,6 +50,7 @@ class ContactService:
             email=email
         )
         self.repo.add(new_contact)
+        self._observable.notify()  # NOTIFY!
         return new_contact
 
     def get_all_contacts(self) -> List[Contact]:
@@ -45,6 +60,7 @@ class ContactService:
     def delete_contact(self, contact_id: uuid.UUID) -> None:
         """Deletes a contact by their ID."""
         self.repo.delete(contact_id)
+        self._observable.notify()  # NOTIFY!
 
     def update_contact(self, contact_id: uuid.UUID, name: str, email: Optional[str]) -> Contact:
         """
@@ -72,4 +88,5 @@ class ContactService:
         contact_to_update.email = email
 
         self.repo.update(contact_to_update)
+        self._observable.notify()  # NOTIFY!
         return contact_to_update
