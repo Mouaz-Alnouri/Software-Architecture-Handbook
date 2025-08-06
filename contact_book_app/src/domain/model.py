@@ -37,7 +37,6 @@ class ContactService:
         if not name:
             raise ValueError("Name cannot be empty.")
 
-        # Check for duplicate emails. This check is ignored if email is None.
         if email:
             existing_contacts = self.repo.list()
             for contact in existing_contacts:
@@ -50,7 +49,7 @@ class ContactService:
             email=email
         )
         self.repo.add(new_contact)
-        self._observable.notify()  # NOTIFY!
+        self._observable.notify(self)  # NOTIFY with self (the service instance)
         return new_contact
 
     def get_all_contacts(self) -> List[Contact]:
@@ -60,7 +59,7 @@ class ContactService:
     def delete_contact(self, contact_id: uuid.UUID) -> None:
         """Deletes a contact by their ID."""
         self.repo.delete(contact_id)
-        self._observable.notify()  # NOTIFY!
+        self._observable.notify(self)  # NOTIFY with self
 
     def update_contact(self, contact_id: uuid.UUID, name: str, email: Optional[str]) -> Contact:
         """
@@ -76,17 +75,14 @@ class ContactService:
         if not name:
             raise ValueError("Name cannot be empty.")
 
-        # Check for duplicate emails, but only if the email is being changed.
         if email and email != contact_to_update.email:
             for contact in self.repo.list():
-                # We must not compare the contact with itself
                 if contact.contact_id != contact_id and contact.email == email:
                     raise ValueError("Email already exists.")
 
-        # Update the fields of the retrieved contact object
         contact_to_update.name = name
         contact_to_update.email = email
 
         self.repo.update(contact_to_update)
-        self._observable.notify()  # NOTIFY!
+        self._observable.notify(self)  # NOTIFY with self
         return contact_to_update

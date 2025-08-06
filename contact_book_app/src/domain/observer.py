@@ -42,11 +42,7 @@ class Observable:
         except ValueError:
             pass  # Fails silently if observer is not attached
 
-    def notify(self) -> None:
-        """Notify all observers about an event."""
-        # We pass 'self' to the update method, but it will be an instance
-        # of the class that HAS the Observable, i.e., ContactService.
-        # This is a bit of a trick to make it work with composition.
-        # The 'subject' type hint in Observer.update() makes this clear.
+    def notify(self, subject: 'ContactService') -> None:
+        """Notify all observers about an event, passing the subject."""
         for observer in self._observers:
-            observer.update(self)
+            observer.update(subject)

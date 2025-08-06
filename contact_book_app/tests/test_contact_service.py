@@ -143,7 +143,7 @@ def test_update_contact_to_duplicate_email_raises_error(mock_repo: MagicMock):
     contact_to_update_id = uuid.uuid4()
 
     contact_to_update = Contact(contact_id=contact_to_update_id, name="Jane Doe", email="jane@example.com")
-    existing__contact = Contact(contact_id=uuid.uuid4(), name="John Doe", email="john@example.com")
+    existing_contact = Contact(contact_id=uuid.uuid4(), name="John Doe", email="john@example.com")
 
     # Configure mock repo
     mock_repo.get.return_value = contact_to_update
@@ -161,7 +161,7 @@ def test_service_notifies_observers_on_add(mock_repo: MagicMock, mock_observer: 
     # ARRANGE
     service = ContactService(repo=mock_repo)
     service.attach(mock_observer)
-    mock_repo.list.return_value = []  # For duplicate email check
+    mock_repo.list.return_value = []
 
     # ACT
     service.add_contact(name="Test", email="test@example.com")
@@ -207,6 +207,6 @@ def test_service_does_not_notify_on_error(mock_repo: MagicMock, mock_observer: M
 
     # ACT & ASSERT
     with pytest.raises(ValueError):
-        service.add_contact(name="")  # This will raise an error
+        service.add_contact(name="")
 
     mock_observer.update.assert_not_called()
