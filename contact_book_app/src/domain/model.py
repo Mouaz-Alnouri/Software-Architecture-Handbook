@@ -23,7 +23,12 @@ class ContactService:
         if not name:
             raise ValueError("Name cannot be empty.")
 
-        # todo: we might check for duplicate emails here
+        # Check for duplicate emails. This check is ignored if email is None.
+        if email:
+            existing_contacts = self.repo.list()
+            for contact in existing_contacts:
+                if contact.email == email:
+                    raise ValueError("Email already exists.")
 
         new_contact = Contact(
             contact_id=uuid.uuid4(),
